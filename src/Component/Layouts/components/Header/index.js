@@ -2,7 +2,18 @@ import { useEffect, useState } from 'react';
 import images from '~/assets/images';
 import Tippy from '@tippyjs/react/headless';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faCircleXmark, faEllipsisV, faKeyboard, faLanguage, faMagnifyingGlass, faQuestion, faQuestionCircle, faSpinner } from '@fortawesome/free-solid-svg-icons';
+import {
+    faCircleXmark,
+    faCloudUpload,
+    faEllipsisV,
+    faKeyboard,
+    faLanguage,
+    faMagnifyingGlass,
+    faMessage,
+    faQuestionCircle,
+    faSpinner,
+    faUpload,
+} from '@fortawesome/free-solid-svg-icons';
 
 import classNames from 'classnames/bind';
 import styles from './Header.module.scss';
@@ -14,19 +25,32 @@ import Menu from '~/Component/Popper/Menu';
 const cx = classNames.bind(styles);
 const MENU_ITEMS = [
     {
-        icon: <FontAwesomeIcon icon={faLanguage}/>,
-        title: "English"
+        icon: <FontAwesomeIcon icon={faLanguage} />,
+        title: 'English',
+        children: {
+            title: 'Language',
+            data: [
+                {
+                    code: 'en',
+                    title: 'English',
+                },
+                {
+                    code: 'vi',
+                    title: 'Tiếng Việt',
+                },
+            ],
+        },
     },
     {
-        icon: <FontAwesomeIcon icon={faQuestionCircle}/>,
-        title: "Feedback and help",
-        to: "/feedback"
+        icon: <FontAwesomeIcon icon={faQuestionCircle} />,
+        title: 'Feedback and help',
+        to: '/feedback',
     },
     {
-        icon: <FontAwesomeIcon icon={faKeyboard}/>,
-        title: "Keyboard"
+        icon: <FontAwesomeIcon icon={faKeyboard} />,
+        title: 'Keyboard',
     },
-]
+];
 function Header() {
     const [searchResult, setSearchResult] = useState([]);
 
@@ -35,6 +59,11 @@ function Header() {
             setSearchResult([]);
         }, 0);
     }, []);
+
+    const handleOnchange = (menuItem) => {
+        console.log(menuItem);
+    };
+    const currentUser = true;
     return (
         <header className={cx('wrapper')}>
             <div className={cx('inner')}>
@@ -68,14 +97,34 @@ function Header() {
                         </button>
                     </div>
                 </Tippy>
-
                 <div className={cx('activities')}>
-                    <Button text>Upload</Button>
-                    <Button primary>Login</Button>
-                    <Menu items={MENU_ITEMS}>
-                        <button className={cx('more-btn')}>
-                            <FontAwesomeIcon icon={faEllipsisV} />
-                        </button>
+                    {currentUser ? (
+                        <>
+                            <button className={cx('action-btn')}>
+                                <FontAwesomeIcon icon={faCloudUpload} />
+                            </button>
+                            <button className={cx('action-btn')}>
+                                <FontAwesomeIcon icon={faMessage} />
+                            </button>
+                        </>
+                    ) : (
+                        <>
+                            <Button text>Upload</Button>
+                            <Button primary>Login</Button>
+                        </>
+                    )}
+                    <Menu items={MENU_ITEMS} onFuck={handleOnchange}>
+                        {currentUser ? (
+                            <img
+                                src="https://p16-sign-sg.tiktokcdn.com/aweme/100x100/tos-alisg-avt-0068/4cb70bbfa13773f6795ca74bae4defa5.jpeg?x-expires=1652630400&x-signature=bgfyEt6SqyTbDQHFrBOic6jY9KE%3D"
+                                className={cx('user-avt')}
+                                alt="Nguyen Van A"
+                            />
+                        ) : (
+                            <button className={cx('more-btn')}>
+                                <FontAwesomeIcon icon={faEllipsisV} />
+                            </button>
+                        )}
                     </Menu>
                 </div>
             </div>
