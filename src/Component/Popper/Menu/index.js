@@ -33,6 +33,7 @@ function Menu({ children, items = [] , onFuck=defaultFc}) {
     };
     return (
         <Tippy
+            offset={[12,8]}
             delay={[0, 700]}
             interactive
             placement="bottom-end"

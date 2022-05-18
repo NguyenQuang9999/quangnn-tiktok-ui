@@ -1,26 +1,24 @@
-import { useEffect, useState } from 'react';
-import images from '~/assets/images';
-import Tippy from '@tippyjs/react/headless';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import {
-    faCircleXmark,
-    faCloudUpload,
-    faEllipsisV,
-    faKeyboard,
-    faLanguage,
-    faMagnifyingGlass,
-    faMessage,
-    faQuestionCircle,
-    faSpinner,
-    faUpload,
-} from '@fortawesome/free-solid-svg-icons';
-
+import Tippy from '@tippyjs/react';
+import 'tippy.js/dist/tippy.css';
 import classNames from 'classnames/bind';
 import styles from './Header.module.scss';
-import { Wrapper as PopperWrapper } from '~/Component/Popper';
-import AcountItem from '~/Component/AcountItem';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import {
+    faCoins,
+    faEllipsisV,
+    faGear,
+    faKeyboard,
+    faLanguage,
+    faQuestionCircle,
+    faSignOut,
+    faUser,
+} from '@fortawesome/free-solid-svg-icons';
 import Button from '~/Component/Button';
 import Menu from '~/Component/Popper/Menu';
+import images from '~/assets/images';
+import { MessageIcon, NotifyIcon, UploadIcon } from '~/Component/Icons';
+import Image from '~/Component/Images';
+import Search from '../Search';
 
 const cx = classNames.bind(styles);
 const MENU_ITEMS = [
@@ -51,15 +49,31 @@ const MENU_ITEMS = [
         title: 'Keyboard',
     },
 ];
+const USER_MENU = [
+    {
+        icon: <FontAwesomeIcon icon={faUser} />,
+        title: 'View profile',
+        to: '/@nnquang',
+    },
+    {
+        icon: <FontAwesomeIcon icon={faCoins} />,
+        title: 'Get coins',
+        to: '/coins',
+    },
+    {
+        icon: <FontAwesomeIcon icon={faGear} />,
+        title: 'Setting',
+        to: '/setting',
+    },
+    ...MENU_ITEMS,
+    {
+        icon: <FontAwesomeIcon icon={faSignOut} />,
+        title: 'Log out',
+        to: '/logout',
+        separate: true,
+    },
+];
 function Header() {
-    const [searchResult, setSearchResult] = useState([]);
-
-    useEffect(() => {
-        setTimeout(() => {
-            setSearchResult([]);
-        }, 0);
-    }, []);
-
     const handleOnchange = (menuItem) => {
         console.log(menuItem);
     };
@@ -70,42 +84,25 @@ function Header() {
                 <div className={cx('logo')}>
                     <img src={images.logo} alt="tiktok-logo" />
                 </div>
-
-                <Tippy
-                    interactive
-                    visible={searchResult.length > 0}
-                    render={(attrs) => (
-                        <div className={cx('search-result')} tabIndex="-1" {...attrs}>
-                            <PopperWrapper>
-                                <h4 className={cx('search-title')}>Acounts</h4>
-                                <AcountItem />
-                                <AcountItem />
-                                <AcountItem />
-                                <AcountItem />
-                            </PopperWrapper>
-                        </div>
-                    )}
-                >
-                    <div className={cx('search-bar')}>
-                        <input placeholder="Search acounts or videos" spellCheck={false} />
-                        <button className={cx('close-btn')}>
-                            <FontAwesomeIcon icon={faCircleXmark} />
-                        </button>
-                        <FontAwesomeIcon className={cx('spinner')} icon={faSpinner} />
-                        <button className={cx('search-btn')}>
-                            <FontAwesomeIcon icon={faMagnifyingGlass} />
-                        </button>
-                    </div>
-                </Tippy>
+                <Search />
                 <div className={cx('activities')}>
                     {currentUser ? (
                         <>
-                            <button className={cx('action-btn')}>
-                                <FontAwesomeIcon icon={faCloudUpload} />
-                            </button>
-                            <button className={cx('action-btn')}>
-                                <FontAwesomeIcon icon={faMessage} />
-                            </button>
+                            <Tippy delay={[0, 200]} content="Upload Video">
+                                <button className={cx('action-btn')}>
+                                    <UploadIcon />
+                                </button>
+                            </Tippy>
+                            <Tippy delay={[0, 200]} content="Message">
+                                <button className={cx('action-btn')}>
+                                    <MessageIcon />
+                                </button>
+                            </Tippy>
+                            <Tippy delay={[0, 200]} content="Notification">
+                                <button className={cx('action-btn')}>
+                                    <NotifyIcon />
+                                </button>
+                            </Tippy>
                         </>
                     ) : (
                         <>
@@ -113,9 +110,9 @@ function Header() {
                             <Button primary>Login</Button>
                         </>
                     )}
-                    <Menu items={MENU_ITEMS} onFuck={handleOnchange}>
+                    <Menu items={currentUser ? USER_MENU : MENU_ITEMS} onFuck={handleOnchange}>
                         {currentUser ? (
-                            <img
+                            <Image
                                 src="https://p16-sign-sg.tiktokcdn.com/aweme/100x100/tos-alisg-avt-0068/4cb70bbfa13773f6795ca74bae4defa5.jpeg?x-expires=1652630400&x-signature=bgfyEt6SqyTbDQHFrBOic6jY9KE%3D"
                                 className={cx('user-avt')}
                                 alt="Nguyen Van A"
