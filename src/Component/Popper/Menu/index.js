@@ -7,11 +7,11 @@ import Header from './Header';
 import { useState } from 'react';
 
 const cx = classNames.bind(styles);
-const defaultFc = () => {}
-function Menu({ children, items = [] , onFuck=defaultFc}) {
+const defaultFc = () => {};
+function Menu({ children, items = [], hideOnClick = false, onFuck = defaultFc }) {
     const [history, setHistory] = useState([{ data: items }]);
     const current = history[history.length - 1];
-    
+
     const renderItems = () => {
         return current.data.map((item, index) => {
             const isParent = !!item.children;
@@ -23,8 +23,8 @@ function Menu({ children, items = [] , onFuck=defaultFc}) {
                         if (isParent) {
                             // push children array
                             setHistory((prev) => [...prev, item.children]);
-                        }else{
-                            onFuck(item)
+                        } else {
+                            onFuck(item);
                         }
                     }}
                 />
@@ -33,9 +33,10 @@ function Menu({ children, items = [] , onFuck=defaultFc}) {
     };
     return (
         <Tippy
-            offset={[12,8]}
+            offset={[12, 8]}
             delay={[0, 700]}
             interactive
+            hideOnClick={hideOnClick}
             placement="bottom-end"
             render={(attrs) => (
                 <div className={cx('content')} tabIndex="-1" {...attrs}>
@@ -50,7 +51,7 @@ function Menu({ children, items = [] , onFuck=defaultFc}) {
                     </PopperWrapper>
                 </div>
             )}
-            onHide={() => setHistory(prev => prev.slice(0,1))}
+            onHide={() => setHistory((prev) => prev.slice(0, 1))}
         >
             {children}
         </Tippy>

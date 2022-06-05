@@ -13,7 +13,9 @@
     align-items: center;
     justify-content: space-between;
 }
-
+.logo-link{
+    display: flex;
+}
 .activities{
     display: flex;
     align-items: center;
@@ -34,6 +36,7 @@
     padding: 4px 12px;
     color: #161423;
     cursor: pointer;
+    display: flex;
 }
 .user-avt{
     width: 32px;

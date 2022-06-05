@@ -13,12 +13,15 @@ import {
     faSignOut,
     faUser,
 } from '@fortawesome/free-solid-svg-icons';
+
+import routesConfig from '~/config/routes'
 import Button from '~/Component/Button';
 import Menu from '~/Component/Popper/Menu';
 import images from '~/assets/images';
 import { MessageIcon, NotifyIcon, UploadIcon } from '~/Component/Icons';
 import Image from '~/Component/Images';
 import Search from '../Search';
+import { Link } from 'react-router-dom';
 
 const cx = classNames.bind(styles);
 const MENU_ITEMS = [
@@ -82,7 +85,9 @@ function Header() {
         <header className={cx('wrapper')}>
             <div className={cx('inner')}>
                 <div className={cx('logo')}>
-                    <img src={images.logo} alt="tiktok-logo" />
+                    <Link to={routesConfig.home} className={cx('logo-link')}>
+                        <img src={images.logo} alt="tiktok-logo" />
+                    </Link>
                 </div>
                 <Search />
                 <div className={cx('activities')}>
